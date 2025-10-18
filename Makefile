@@ -14,24 +14,24 @@ DATE=$(shell date +%F-%H%M)
 
 ## 🔼 Запуск всех сервисов
 up:
-    $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml up -d
-    $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d
-    $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml up -d
+        $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml up -d
+        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d
+        $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml up -d
 
 ## 🔽 Остановка всех сервисов
 down:
-    $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml down
-    $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml down
-    $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml down
+        $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml down
+        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml down
+        $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml down
 
 ## 🔁 Перезапуск всех сервисов
 restart: down up
 
 ## 📜 Логи всех сервисов
 logs:
-    $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml logs -f
-    $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml logs -f
-    $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml logs -f
+        $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml logs -f
+        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml logs -f
+        $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml logs -f
 
 ## 📦 Резервное копирование
 backup:
@@ -50,13 +50,13 @@ prometheus-reload:
 
 ## 🔼 Запуск отдельных сервисов
 portainer-up:
-    $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml up -d
+        $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml up -d
 
 prometheus-up:
-    $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d prometheus
+        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d prometheus
 
 grafana-up:
-    $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d grafana
+        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d grafana
 
 nginx-up:
-    $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml up -d
+        $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml up -d
