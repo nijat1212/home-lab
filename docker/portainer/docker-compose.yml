@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  portainer:
+    image: portainer/portainer-ce:lts
+    container_name: portainer
+    restart: always
+    ports:
+      - "9443:9443"   # HTTPS интерфейс Portainer
+      - "8000:8000"   # Edge agent (можно отключить, если не используешь)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    environment:
+      - TZ=Europe/Kyiv
+
+volumes:
+  portainer_data:
