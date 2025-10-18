@@ -1,0 +1,19 @@
+# Docker
+*.env
+*.log
+*.pid
+*.tar
+*.gz
+volumes/
+
+# Python / Node / System
+__pycache__/
+*.pyc
+node_modules/
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Сайт
+site/assets/
+*.pdf
