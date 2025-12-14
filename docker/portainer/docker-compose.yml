@@ -7,12 +7,44 @@ services:
     restart: always
     ports:
       - "9443:9443"   # HTTPS интерфейс Portainer
-      - "8000:8000"   # Edge agent (можно отключить, если не используешь)
+      - "8000:8000"   # Edge agent
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
     environment:
       - TZ=Europe/Kyiv
 
+  db:
+    image: mariadb:10.6
+    container_name: nextcloud-db
+    restart: always
+    volumes:
+      - nextcloud_db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=supersecret
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=nextcloudpass
+
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud-app
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - nextcloud_app:/var/www/html
+      - nextcloud_data:/var/www/html/data
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=nextcloudpass
+    depends_on:
+      - db
+
 volumes:
   portainer_data:
+  nextcloud_db:
+  nextcloud_app:
+  nextcloud_data:
