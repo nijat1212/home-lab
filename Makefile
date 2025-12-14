@@ -1,8 +1,8 @@
 # Makefile — автоматизация DevOps-инфраструктуры
 
 COMPOSE=docker-compose
-PORTAINER_DIR=./portainer
-MONITORING_DIR=./monitoring
+PORTAINER_DIR=./docker/portainer
+MONITORING_DIR=./docker/monitoring
 NGINX_DIR=./nginx-proxy
 BACKUP_DIR=./backups
 MAINTENANCE_SCRIPT=./server_maintenance.sh
@@ -14,49 +14,49 @@ DATE=$(shell date +%F-%H%M)
 
 ## 🔼 Запуск всех сервисов
 up:
-        $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml up -d
-        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d
-        $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml up -d
+	$(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml up -d
+	$(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d
+	$(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml up -d
 
 ## 🔽 Остановка всех сервисов
 down:
-        $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml down
-        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml down
-        $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml down
+	$(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml down
+	$(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml down
+	$(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml down
 
 ## 🔁 Перезапуск всех сервисов
 restart: down up
 
 ## 📜 Логи всех сервисов
 logs:
-        $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml logs -f
-        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml logs -f
-        $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml logs -f
+	$(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml logs -f
+	$(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml logs -f
+	$(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml logs -f
 
 ## 📦 Резервное копирование
 backup:
-    mkdir -p $(BACKUP_DIR)
-    docker run --rm -v portainer_data:/data -v $(BACKUP_DIR):/backup alpine \
-        sh -c "cp /data/portainer.db /backup/portainer.db.$(DATE)"
-    cp $(MONITORING_DIR)/prometheus.yml $(BACKUP_DIR)/prometheus.yml.$(DATE)
+	mkdir -p $(BACKUP_DIR)
+	docker run --rm -v portainer_data:/data -v $(BACKUP_DIR):/backup alpine \
+	sh -c "cp /data/portainer.db /backup/portainer.db.$(DATE)"
+	cp $(MONITORING_DIR)/prometheus.yml $(BACKUP_DIR)/prometheus.yml.$(DATE)
 
 ## 🧼 Системное обслуживание
 maintenance:
-    bash $(MAINTENANCE_SCRIPT)
+	bash $(MAINTENANCE_SCRIPT)
 
 ## 🔁 Перезагрузка Prometheus (без остановки контейнера)
 prometheus-reload:
-    docker exec prometheus kill -HUP 1
+	docker exec prometheus kill -HUP 1
 
 ## 🔼 Запуск отдельных сервисов
 portainer-up:
-        $(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml up -d
+	$(COMPOSE) -f $(PORTAINER_DIR)/docker-compose.yml up -d
 
 prometheus-up:
-        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d prometheus
+	$(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d prometheus
 
 grafana-up:
-        $(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d grafana
+	$(COMPOSE) -f $(MONITORING_DIR)/docker-compose.yml up -d grafana
 
 nginx-up:
-        $(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml up -d
+	$(COMPOSE) -f $(NGINX_DIR)/docker-compose.yml up -d
