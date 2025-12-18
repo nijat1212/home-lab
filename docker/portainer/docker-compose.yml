@@ -43,8 +43,27 @@ services:
     depends_on:
       - db
 
+  dc1:
+    build: ./samba-ad   # путь к папке, где будут Dockerfile и entrypoint.sh
+    container_name: dc1
+    hostname: DC1
+    network_mode: host
+    environment:
+      REALM: LAB.LOCAL
+      DOMAIN: LAB
+      ADMIN_PASS: Passw0rd!
+      HOSTNAME_OVERRIDE: DC1
+    volumes:
+      - dc1_var:/var/lib/samba
+      - dc1_log:/var/log/samba
+    restart: unless-stopped
+
+
+
 volumes:
   portainer_data:
   nextcloud_db:
   nextcloud_app:
   nextcloud_data:
+  dc1_var:
+  dc1_log:
